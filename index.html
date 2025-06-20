@@ -3,309 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Présentation Co-Développement (Plein Écran Amélioré)</title>
+    <title>Générateur Script GitHub Pages (V10 - Fiable)</title>
     <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden; 
-            font-family: 'Calibri', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #2c3e50; 
-            color: #333;
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding:0; background-color: #f0f2f5; color: #333; line-height: 1.6; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh;}
+        .container { background-color: #fff; padding: 25px 35px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); max-width: 850px; margin: 30px auto; width: 90%;}
+        label { display: block; margin-top: 18px; margin-bottom: 6px; font-weight: 600; color: #495057; }
+        input[type="text"] { width: calc(100% - 24px); padding: 12px; margin-top: 5px; border: 1px solid #ced4da; border-radius: 6px; box-sizing: border-box; font-size: 1em; transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;}
+        input[type="text"]:focus { border-color: #80bdff; outline: 0; box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25); }
+        button { background-color: #007bff; color: white; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; margin-top: 30px; font-size: 1.05em; font-weight: 500; transition: background-color 0.2s ease-in-out;}
+        button:hover { background-color: #0056b3; }
+        .output-section { margin-top: 35px; padding: 20px; background-color: #f8f9fa; border-radius: 8px; border: 1px solid #e9ecef;}
+        .output-section h3 { margin-top: 0; color: #007bff; border-bottom: 1px solid #dee2e6; padding-bottom: 10px; margin-bottom: 18px; font-size: 1.25em;}
+        pre { background-color: #282c34; color: #abb2bf; padding: 18px; border-radius: 6px; white-space: pre-wrap; word-wrap: break-word; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace; font-size: 0.9em; line-height: 1.6; max-height: 400px; overflow-y: auto;}
+        .instructions ol, .instructions ul { padding-left: 25px; margin-top:10px;}
+        .instructions li { margin-bottom: 12px; line-height: 1.65;}
+        .instructions strong { color: #28a745; } /* Vert pour les actions importantes */
+        .copy-btn { margin-left: 15px; padding: 6px 12px; font-size: 0.85em; cursor: pointer; background-color: #6c757d; color:white; border:none; border-radius:4px; vertical-align: middle; transition: background-color 0.2s ease-in-out;}
+        .copy-btn:hover { background-color: #545b62;}
+        .important { color: #dc3545; font-weight: bold; }
+        .note { font-size: 0.9em; color: #6c757d; margin-bottom: 12px; display: block;}
+        code.inline-code { background-color: #e9ecef; border: 1px solid #ced4da; padding: 2px 6px; border-radius: 4px; color: #c7254e; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;}
 
-        .slideshow-container {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .presentation-slide {
-            background-color: #ffffff;
-            width: 100%;
-            height: 100%;
-            padding: 30px 40px; 
-            box-sizing: border-box; 
-            display: none; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            text-align: center;
-            position: absolute; 
-            top: 0;
-            left: 0;
-            opacity: 0;
-            transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
-            transform: scale(0.95);
-        }
-
-        .presentation-slide.active {
-            display: flex; 
-            opacity: 1;
-            transform: scale(1);
-            z-index: 1;
-        }
-        
-        .slide-inner-content {
-            max-width: 90%; 
-            width: 100%;
-        }
-
-        .slide-title {
-            font-size: 3em; 
-            color: #005A9C;
-            margin-bottom: 20px; /* Un peu plus d'espace avant le sous-titre */
-            font-weight: 700;
-        }
-        
-        .slide-subtitle {
-            font-size: 1.7em; 
-            color: #E87722; 
-            margin-bottom: 30px; /* Espace avant le contenu principal */
-            font-weight: 500;
-        }
-
-        /* Styles pour les paragraphes descriptifs */
-        .slide-content .descriptive-paragraph {
-            font-size: 1.2em; /* Maintenir une bonne taille */
-            color: #444; 
-            margin-bottom: 25px; 
-            text-align: center; /* Centrer ces paragraphes */
-            max-width: 750px; /* Limiter leur largeur pour ne pas qu'ils s'étalent trop */
-            margin-left: auto; /* Centrer le bloc de texte lui-même */
-            margin-right: auto; /* Centrer le bloc de texte lui-même */
-            line-height: 1.7;
-        }
-        
-        /* Styles pour les listes à puces (restent alignées à gauche) */
-        .slide-content ul {
-            list-style-type: none;
-            padding-left: 0; /* Sera géré par la marge des items si besoin */
-            text-align: left;
-            margin-top: 30px; 
-            max-width: 750px; /* Limiter aussi la largeur des listes pour cohérence */
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .slide-content ul li {
-            background-color: #f8f9fa; 
-            margin-bottom: 18px; 
-            padding: 20px 25px;
-            border-radius: 8px;
-            border-left: 6px solid #007BFF; 
-            display: flex;
-            align-items: center; 
-            font-size: 1.15em; 
-            color: #333;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-        
-        .slide-content ul li .icon {
-            font-size: 2em; 
-            margin-right: 22px; 
-            color: #007BFF; 
-            flex-shrink: 0; 
-        }
-        
-        .slide-content ul li .text-content {
-            flex-grow: 1;
-        }
-
-        .highlight {
-            color: #E74C3C; 
-            font-weight: bold; /* Mieux que 600 pour certaines polices */
-        }
-        
-        .footer-note {
-            margin-top: 40px; 
-            font-size: 1.05em; 
-            color: #7f8c8d; 
-            font-style: italic;
-            text-align: center; /* Centrer la note de pied */
-        }
-        
-        /* Contrôles de navigation (inchangés) */
-        .prev, .next {
-            cursor: pointer;
-            position: absolute;
-            top: 50%;
-            width: auto;
-            padding: 18px;
-            margin-top: -25px;
-            color: white;
-            font-weight: bold;
-            font-size: 28px;
-            transition: 0.3s ease;
-            border-radius: 0 5px 5px 0;
-            user-select: none;
-            background-color: rgba(0,0,0,0.2);
-            z-index: 2; 
-        }
-        .next { right: 0; border-radius: 5px 0 0 5px; }
-        .prev { left: 0; }
-        .prev:hover, .next:hover { background-color: rgba(0,0,0,0.5); }
-
-
-        /* Styles pour l'impression (inchangés) */
-        @media print {
-            body, html { overflow: visible; height: auto; background-color: #fff; }
-            .slideshow-container { height: auto; }
-            .presentation-slide {
-                display: block !important; 
-                position: relative !important; 
-                opacity: 1 !important;
-                transform: scale(1) !important;
-                height: auto;
-                min-height: 90vh; 
-                page-break-after: always;
-                padding: 15mm 10mm;
-                border-top: none;
-            }
-            .presentation-slide:last-child { page-break-after: avoid; }
-            .prev, .next { display: none; } 
-
-            .slide-title { font-size: 20pt; }
-            .slide-subtitle { font-size: 14pt; }
-            .slide-content .descriptive-paragraph, .slide-content ul li { font-size: 11pt; }
-            .slide-content ul li { border-left: 3px solid #007BFF; padding: 10px 12px; box-shadow: none;}
-            .slide-content .descriptive-paragraph { max-width: 100%; } /* Permettre au texte de prendre toute la largeur en impression */
-            .slide-content ul { max-width: 100%; }
+        @media (max-width: 768px) {
+            body { margin: 0; padding: 15px; align-items: stretch;}
+            .container { width: 100%; margin: 15px 0; padding: 20px; }
+            h1 { font-size: 1.6em; }
+            h3 { font-size: 1.15em; }
+            input[type="text"], button { font-size: 0.95em; }
+            pre { font-size: 0.8em; }
         }
     </style>
 </head>
 <body>
+    <div class="container">
+        <h1>Générateur de Script pour Déploiement GitHub Pages</h1>
+        <p class="note">Cet outil génère un script à copier-coller dans votre terminal pour publier un nouveau projet sur GitHub Pages. Remplissez les champs et suivez attentivement les instructions.</p>
 
-    <div class="slideshow-container">
-        <!-- SLIDE 1 : TITRE ET OBJECTIF DE L'APPROCHE POUR LA JOURNÉE -->
-        <div class="presentation-slide active" id="slide1">
-            <div class="slide-inner-content">
-                <h1 class="slide-title">🚀 Notre Cadre pour Co-Construire</h1>
-                <p class="slide-subtitle">S'inspirer du Co-Développement pour une Journée Productive</p>
-                <div class="slide-content">
-                    <p class="descriptive-paragraph">Aujourd'hui, nous allons bâtir <span class="highlight">ensemble</span> la feuille de route des référents métiers.</p>
-                    <p class="descriptive-paragraph">Pour cela, adoptons un état d'esprit favorisant :</p>
-                    <ul>
-                        <li><span class="icon">💡</span><span class="text-content">L'<strong>Intelligence Collective</strong> : Valoriser chaque expérience.</span></li>
-                        <li><span class="icon">🤝</span><span class="text-content">La <strong>Collaboration & l'Entraide</strong> : S'appuyer les uns sur les autres.</span></li>
-                        <li><span class="icon">🎯</span><span class="text-content">L'<strong>Action Concrète</strong> : Aboutir à des solutions partagées et opérationnelles.</span></li>
-                    </ul>
-                    <p class="footer-note">Notre objectif : une feuille de route <span class="highlight">par vous</span> et <span class="highlight">pour vous</span>.</p>
-                </div>
+        <label for="localPath">Chemin complet ABSOLU du dossier local de votre projet :</label>
+        <input type="text" id="localPath" placeholder="Ex: /Users/votreNom/Documents/MonProjet">
+
+        <label for="repoName">Nom du dépôt à créer sur GitHub (ex: mon-projet-cool):</label>
+        <input type="text" id="repoName" placeholder="mon-projet-cool">
+
+        <label for="githubUser">Votre nom d'utilisateur GitHub :</label>
+        <input type="text" id="githubUser" placeholder="VotreLoginGitHub">
+        
+        <label for="commitMessage">Message pour le premier commit :</label>
+        <input type="text" id="commitMessage" value="Initial commit">
+
+        <button onclick="generateScript()">Générer le Script et les Instructions</button>
+
+        <div id="output" style="display:none;">
+            <div class="output-section instructions">
+                <h3>Partie 1 : Création du Dépôt sur GitHub.com</h3>
+                <ol>
+                    <li>Allez sur <a href="https://github.com/new" target="_blank" rel="noopener noreferrer">https://github.com/new</a> pour créer un nouveau dépôt.</li>
+                    <li><strong>Repository name :</strong> Entrez "<span id="ghRepoName1" class="important"></span>". <span class="important">N'utilisez pas d'espaces dans ce nom. Utilisez des tirets ou underscores.</span></li>
+                    <li>Assurez-vous que "Public" est sélectionné.</li>
+                    <li><span class="important">NE COCHEZ AUCUNE CASE</span> d'initialisation ("Add a README file", "Add .gitignore", "Choose a license"). Le dépôt doit être créé <span class="important">complètement vide</span>.</li>
+                    <li>Cliquez sur "Create repository".</li>
+                    <li>Sur la page suivante (celle avec "Quick setup... or create a new repository on the command line"), repérez et copiez l'URL HTTPS. Elle ressemblera à : <br><code class="inline-code">https://github.com/<span id="ghUser1" class="important"></span>/<span id="ghRepoName2" class="important"></span>.git</code><br>Le script terminal ci-dessous utilisera cette URL (elle y sera déjà insérée).</li>
+                </ol>
+            </div>
+
+            <div class="output-section">
+                <h3>Partie 2 : Script à Copier-Coller dans votre Terminal <button class="copy-btn" onclick="copyToClipboard('terminalCommands')">Copier Script</button></h3>
+                <p class="note">Ouvrez votre Terminal (ou Git Bash sur Windows). <span class="important">Assurez-vous d'être dans votre dossier "home" ou un dossier parent de votre projet (pas à l'intérieur du dossier du projet lui-même) avant de coller</span>, car la première commande est <code>cd "CHEMIN_DU_PROJET"</code>.</p>
+                <p class="note">Copiez TOUT le bloc de commandes ci-dessous et collez-le en une seule fois dans votre terminal. Appuyez sur Entrée. Le script s'exécutera étape par étape.</p>
+                <pre id="terminalCommands"></pre>
+            </div>
+
+            <div class="output-section instructions">
+                <h3>Partie 3 : Activation de GitHub Pages (après le "push" réussi)</h3>
+                <ol>
+                    <li>Retournez à votre dépôt "<span id="ghRepoName3" class="important"></span>" sur GitHub.com.</li>
+                    <li>Allez dans l'onglet "Settings" du dépôt.</li>
+                    <li>Dans le menu de gauche, cliquez sur "Pages" (sous "Code and automation").</li>
+                    <li>Sous "Build and deployment" > "Source", sélectionnez "Deploy from a branch".</li>
+                    <li>Dans la section "Branch" :
+                        <ul>
+                            <li>Branche : sélectionnez <strong><code>main</code></strong>.</li>
+                            <li>Dossier : sélectionnez <strong><code>/(root)</code></strong>.</li>
+                        </ul>
+                    </li>
+                    <li>Cliquez sur "Save".</li>
+                    <li>Attendez quelques minutes (typiquement 1-5 min). Rafraîchissez la page "Pages". L'URL de votre site publié (ex: <code>https://<votre_nom_utilisateur>.github.io/<nom_depot>/</code>) devrait apparaître, souvent dans un encadré vert. Si vous voyez "Your site is currently being built...", attendez encore un peu.</li>
+                </ol>
             </div>
         </div>
-
-        <!-- SLIDE 2 : LE CO-DÉVELOPPEMENT EN BREF & NOS RÔLES ADAPTÉS -->
-        <div class="presentation-slide" id="slide2">
-            <div class="slide-inner-content">
-                <h1 class="slide-title">🌱 Le Co-Développement : L'Essentiel</h1>
-                <p class="slide-subtitle">Apprendre ensemble pour agir mieux.</p>
-                <div class="slide-content">
-                    <p class="descriptive-paragraph">C'est une méthode où un groupe s'entraide pour trouver des solutions à des défis professionnels.</p>
-                    <p class="descriptive-paragraph">Pour notre journée, adaptons les rôles :</p>
-                    <ul>
-                        <li><span class="icon">🙋</span><span class="text-content"><strong>Le "Porteur d'Idée" :</strong> C'est vous, en partageant vos réflexions pour la feuille de route.</span></li>
-                        <li><span class="icon">👂</span><span class="text-content"><strong>Les "Contributeurs Éclairés" :</strong> C'est le groupe, qui écoute, questionne, et enrichit.</span></li>
-                        <li><span class="icon">🧭</span><span class="text-content"><strong>Le "Gardien du Cadre" (moi !) :</strong> Pour faciliter nos échanges et nous garder concentrés.</span></li>
-                    </ul>
-                    <p class="descriptive-paragraph footer-note">Le principe : <span class="highlight">chaque contribution est une pierre à l'édifice</span>.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- SLIDE 3 : NOS RÈGLES D'OR POUR DES ÉCHANGES EFFICACES -->
-        <div class="presentation-slide" id="slide3">
-            <div class="slide-inner-content">
-                <h1 class="slide-title">🤝 Nos "Règles d'Or" du Jour</h1>
-                <p class="slide-subtitle">Un cadre simple pour bien travailler ensemble.</p>
-                <div class="slide-content">
-                    <!-- Les listes sont déjà bien structurées pour un alignement à gauche avec icônes -->
-                    <ul>
-                        <li><span class="icon">🗣️</span><span class="text-content"><strong>Parole Libre & Authentique :</strong> Osez partager vos idées !</span></li>
-                        <li><span class="icon">👂</span><span class="text-content"><strong>Écoute Active & Bienveillante :</strong> Comprenons-nous sans jugement.</span></li>
-                        <li><span class="icon">❓</span><span class="text-content"><strong>Questions de Clarification :</strong> Pour une compréhension mutuelle.</span></li>
-                        <li><span class="icon">💡</span><span class="text-content"><strong>Idées Constructives :</strong> Pensons solutions et améliorations.</span></li>
-                        <li><span class="icon">🤫</span><span class="text-content"><strong>Confidentialité :</strong> Respectons nos échanges.</span></li>
-                        <li><span class="icon">🎯</span><span class="text-content"><strong>Focus sur l'Objectif :</strong> Notre feuille de route commune.</span></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- SLIDE 4 : LES BÉNÉFICES ATTENDUS DE CETTE APPROCHE -->
-        <div class="presentation-slide" id="slide4">
-            <div class="slide-inner-content">
-                <h1 class="slide-title">✨ Pourquoi cette approche aujourd'hui ?</h1>
-                <p class="slide-subtitle">Les bénéfices pour notre travail et pour vous.</p>
-                <div class="slide-content">
-                    <p class="descriptive-paragraph">En adoptant cet état d'esprit, nous visons :</p>
-                    <ul>
-                        <li><span class="icon">🗺️</span><span class="text-content">Une Feuille de Route <span class="highlight">plus riche et pertinente</span>.</span></li>
-                        <li><span class="icon">💪</span><span class="text-content">Une <span class="highlight">appropriation forte</span> du résultat par chacun.</span></li>
-                        <li><span class="icon">🔗</span><span class="text-content">Un <span class="highlight">collectif de référents renforcé</span>.</span></li>
-                        <li><span class="icon">🚀</span><span class="text-content">Une <span class="highlight">journée dynamique et engageante</span>.</span></li>
-                    </ul>
-                    <p class="footer-note">Prêts à co-construire ? Allons-y !</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Contrôles de navigation (optionnels) -->
-        <a class="prev" onclick="plusSlides(-1)">❮</a>
-        <a class="next" onclick="plusSlides(1)">❯</a>
     </div>
 
     <script>
-        let slideIndex = 0; 
-        const slides = document.getElementsByClassName("presentation-slide");
+        function generateScript() {
+            const localPath = document.getElementById('localPath').value.trim();
+            const repoName = document.getElementById('repoName').value.trim();
+            const githubUser = document.getElementById('githubUser').value.trim();
+            let commitMessage = document.getElementById('commitMessage').value.trim();
 
-        function showSlides(n) {
-            if (n >= slides.length) { 
-                slideIndex = slides.length - 1; 
-                return; 
+            if (!localPath || !repoName || !githubUser) {
+                alert("Veuillez remplir le chemin local, le nom du dépôt et votre nom d'utilisateur GitHub !");
+                return;
             }
-            if (n < 0) { 
-                slideIndex = 0; 
-                return; 
+            if (!commitMessage) {
+                commitMessage = `Initial commit for ${repoName}`;
             }
 
-            for (let i = 0; i < slides.length; i++) {
-                slides[i].classList.remove("active");
+            if (/\s/.test(repoName)) {
+                alert("Le nom du dépôt GitHub ne doit pas contenir d'espaces. Utilisez des tirets (-) ou des underscores (_). Ex: mon-super-projet");
+                return;
             }
-            slides[slideIndex].classList.add("active");
+            if (!(/^(\/|~|[a-zA-Z]:\\)/.test(localPath))) {
+                alert("Le chemin du dossier local semble incorrect. Assurez-vous qu'il est complet et absolu (ex: /Users/nom/Documents/Projet ou C:\\Users\\Nom\\Documents\\Projet).");
+                return;
+            }
+
+            const githubRepoUrl = `https://github.com/${githubUser}/${repoName}.git`;
+
+            document.getElementById('ghRepoName1').textContent = repoName;
+            document.getElementById('ghUser1').textContent = githubUser;
+            document.getElementById('ghRepoName2').textContent = repoName;
+            document.getElementById('ghRepoName3').textContent = repoName;
+            
+            // Construire le script en une seule chaîne, avec des '&&' pour chaîner les commandes
+            // Chaque commande Git est suivie d'un 'echo' pour le statut ou d'une gestion d'erreur.
+            const commands = [
+                `echo "--- Début du script d'automatisation pour ${repoName} ---"`,
+                `echo "IMPORTANT : Assurez-vous d'avoir créé le dépôt '${repoName}' sur GitHub.com (vide, sans README)."`,
+                `echo "URL distante cible : ${githubRepoUrl}"`,
+                `echo "-------------------------------------------------------------------"`,
+                
+                `echo ""`,
+                `echo "1. Navigation vers votre dossier de projet local..."`,
+                `cd "${localPath}" && echo "OK : Vous êtes maintenant dans le dossier ${localPath}" || { echo "ERREUR : Impossible de naviguer vers ${localPath}. Vérifiez le chemin et les permissions."; exit 1; }`,
+                
+                `echo ""`,
+                `echo "2. Initialisation de Git dans ce dossier (si ce n'est pas déjà un dépôt)..."`,
+                `git init && echo "OK : Dépôt Git initialisé (ou déjà existant)." || { echo "ERREUR : Échec de git init."; exit 1; }`,
+                
+                `echo ""`,
+                `echo "3. Configuration de la branche principale en 'main'..."`,
+                `git branch -M main && echo "OK : Branche principale configurée/renommée en 'main'." || echo "INFO : La branche principale est déjà 'main' ou un problème est survenu lors du renommage."`,
+                
+                `echo ""`,
+                `echo "4. Ajout de tous les fichiers du projet à l'index Git..."`,
+                `git add . && echo "OK : Fichiers ajoutés à l'index Git." || { echo "ERREUR : Échec de git add."; exit 1; }`,
+                
+                `echo ""`,
+                `echo "5. Création du premier commit..."`,
+                `(git diff-index --quiet HEAD -- || git commit -m "${commitMessage}") && echo "OK : Commit créé (ou aucun changement à commiter)." || { echo "ERREUR : Échec de git commit."; exit 1; }`,
+                
+                `echo ""`,
+                `echo "6. Liaison au dépôt distant sur GitHub..."`,
+                // Supprimer 'origin' s'il existe déjà pour éviter une erreur
+                '(git remote remove origin >/dev/null 2>&1 || true)',
+                `git remote add origin ${githubRepoUrl} && echo "OK : Dépôt local lié au distant (${repoName})." || { echo "ERREUR : Échec de git remote add origin. Vérifiez l'URL et si 'origin' est déjà utilisé différemment."; exit 1; }`,
+                
+                `echo ""`,
+                `echo "7. Envoi (push) vers la branche 'main' sur GitHub..."`,
+                `echo "ATTENTION : Il vous sera demandé votre nom d'utilisateur GitHub PUIS votre Personal Access Token (PAT) comme mot de passe."`,
+                `git push -u origin main && echo "OK : Fichiers envoyés avec succès vers GitHub !" || { echo "ERREUR : Échec de git push. Vérifiez vos identifiants (PAT!), la connexion internet, que le dépôt distant '${repoName}' est VIDE et que votre branche locale est bien 'main'."; exit 1; }`,
+                
+                `echo ""`,
+                `echo "--- Script Terminal Terminé ---"`,
+                `echo "Si le 'push' a réussi (message 'OK : Fichiers envoyés...'), passez à la Partie 3 sur GitHub.com."`,
+                `echo "Si une erreur est survenue, veuillez vérifier les messages ci-dessus."`,
+                `echo "-------------------------------------------------------------------"`
+            ];
+
+            // Joindre les commandes avec '&&' pour l'exécution séquentielle
+            // mais pour un script à copier-coller, des sauts de ligne sont mieux.
+            // Zsh et Bash exécuteront les lignes séquentiellement si collées.
+            const scriptContent = commands.join('\n');
+
+
+            document.getElementById('terminalCommands').textContent = scriptContent;
+            document.getElementById('output').style.display = 'block';
+            document.getElementById('output').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
-        function plusSlides(n) {
-            let newIndex = slideIndex + n;
-            if (newIndex >= 0 && newIndex < slides.length) {
-                slideIndex = newIndex;
-                showSlides(slideIndex);
-            }
+        function copyToClipboard(elementId) {
+            const textToCopy = document.getElementById(elementId).textContent;
+            navigator.clipboard.writeText(textToCopy).then(function() {
+                alert('Script copié dans le presse-papiers ! Collez-le dans votre terminal et exécutez-le.');
+            }, function(err) {
+                try {
+                    const textArea = document.createElement("textarea");
+                    textArea.value = textToCopy;
+                    textArea.style.position = "fixed"; 
+                    textArea.style.left = "-9999px";
+                    document.body.appendChild(textArea);
+                    textArea.focus();
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    alert('Script copié dans le presse-papiers ! (fallback) Collez-le dans votre terminal et exécutez-le.');
+                } catch (e_fallback) {
+                    alert('Erreur lors de la copie. Veuillez copier manuellement le bloc de commandes affiché.');
+                    console.error('Erreur copie: ', err, e_fallback);
+                }
+            });
         }
-
-        document.addEventListener('keydown', function(event) {
-            if (event.key === "ArrowRight" || event.key === "ArrowDown" || event.key === "PageDown" || event.key === " ") {
-                event.preventDefault(); 
-                plusSlides(1);
-            } else if (event.key === "ArrowLeft" || event.key === "ArrowUp" || event.key === "PageUp") {
-                event.preventDefault();
-                plusSlides(-1);
-            } else if (event.key === "Home") {
-                event.preventDefault();
-                slideIndex = 0;
-                showSlides(slideIndex);
-            } else if (event.key === "End") {
-                event.preventDefault();
-                slideIndex = slides.length - 1;
-                showSlides(slideIndex);
-            }
-        });
-
-        showSlides(slideIndex);
     </script>
-
 </body>
 </html>
